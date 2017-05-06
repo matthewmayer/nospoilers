@@ -58,7 +58,7 @@ exports.show = (req, res) => {
                     var wikilink = (data.body.entities[wikipedia.id]["sitelinks"]["enwiki"]["title"])
                     
                     
-                    res.render('show', { title: 'Show', show:show, episodes:episodes, wikilink:wikilink });
+                    res.render('show', { title: show.seriesName, show:show, episodes:episodes, wikilink:wikilink });
                   });
                 }
                 

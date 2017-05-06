@@ -1,9 +1,12 @@
 extends layout
 
 block content
+  p 
+    a(href="/") Home
   h1 Search
   each show in shows
     p 
       a(href="/show/#{show.id}")
-        img(src="https://thetvdb.com/banners/#{show.banner}" style="max-width:400px")
+        if show.banner
+          img(src="https://thetvdb.com/banners/#{show.banner}" style="max-width:400px")
         h2 #{show.seriesName} - #{show.network}

@@ -1,9 +1,12 @@
 extends layout
 
 block content
+  p 
+    a(href="/") Home
   h1 #{show.seriesName} - #{show.network}
   
-  img(src="https://thetvdb.com/banners/#{show.banner}" style="max-width:400px")
+  if show.banner
+    img(src="https://thetvdb.com/banners/#{show.banner}" style="max-width:400px")
   
   p First aired: #{show.firstAired}
   p #{show.overview}
@@ -20,6 +23,6 @@ block content
         p Season #{episode.airedSeason} Episode #{episode.airedEpisodeNumber}
         - lastEpisodeSeason = episode.airedSeason
         p First aired 
-          a(href="/timetravel?wikilink=#{wikilink}&date=#{episode.firstAired}") #{episode.firstAired} - show me Wikipedia from the day before!
+          a(target="_blank" href="/timetravel?wikilink=#{wikilink}&date=#{episode.firstAired}") #{episode.firstAired} - show me Wikipedia from the day before!
         p #{episode.overview}
     

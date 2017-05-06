@@ -2,6 +2,9 @@ extends layout
 
 block content
   h1 No Spoilers
+  p This site will let you view the Wikipedia page for a TV show, as of the day before a particular episode.
+  p So for example if you'd like to read more about a show, but not see spoilers from an episode or season you haven't watched yet, now you can!
+  p This uses the TheTVDB API for TV shows, and the Wikidata and Wikipedia APIs.
   p Search for a show
   form(method="GET" action="search")
     input(type="text" name="show")
