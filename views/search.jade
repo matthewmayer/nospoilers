@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1 Search
+  each show in shows
+    p 
+      a(href="/show/#{show.id}")
+        img(src="https://thetvdb.com/banners/#{show.banner}" style="max-width:400px")
+        h2 #{show.seriesName} - #{show.network}

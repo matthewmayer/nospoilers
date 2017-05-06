@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h1 #{show.seriesName} - #{show.network}
+  
+  img(src="https://thetvdb.com/banners/#{show.banner}" style="max-width:400px")
+  
+  p First aired: #{show.firstAired}
+  p #{show.overview}
+  //- p Wikipedia: 
+  //-   a(href="https://en.wikipedia.org/wiki/#{wikilink}") https://en.wikipedia.org/wiki/#{wikilink}
+  - var lastEpisodeSeason = -1
+  each episode in episodes
+    if episode.absoluteNumber>0
+      div
+        if lastEpisodeSeason!=episode.airedSeason
+          h2 Season #{episode.airedSeason}
+          hr
+        h4 #{episode.episodeName}
+        p Season #{episode.airedSeason} Episode #{episode.airedEpisodeNumber}
+        - lastEpisodeSeason = episode.airedSeason
+        p First aired 
+          a(href="/timetravel?wikilink=#{wikilink}&date=#{episode.firstAired}") #{episode.firstAired} - show me Wikipedia from the day before!
+        p #{episode.overview}
+    
