@@ -6,9 +6,24 @@ const _ = require("underscore")
 const WikidataSearch = require('wikidata-search').WikidataSearch;
 const got = require("got")
 const moment = require("moment")
+const async = require("async")
 
 exports.home = (req, res) => {
-    res.render('index', { title: 'No spoilers' });
+    const tvdb = new TVDB(process.env.TVDB_API_KEY);
+    var series = [121361, 176941,81189,80337,153021]
+    async.map(series, (id, callback) => {
+      tvdb.getSeriesById(id)
+        .then(show => { 
+          callback(null, show)
+         })
+        .catch(callback);  
+    }, (err, shows) => {
+      if (err) {
+        return res.status(500).send(err)
+      }
+      res.render('index', { title: 'No spoilers', shows:shows });
+    })
+    
 }
 exports.search = (req, res) => {
   const tvdb = new TVDB(process.env.TVDB_API_KEY);
@@ -28,7 +43,14 @@ exports.show = (req, res) => {
   const tvdb = new TVDB(process.env.TVDB_API_KEY);
   tvdb.getSeriesAllById(parseInt(req.params.id))
   .then(show => {
-      var episodes = _.sortBy(show.episodes,"absoluteNumber")
+      var episodes = _.map(_.sortBy(show.episodes,"absoluteNumber"), episode => {
+        
+        if (episode.firstAired) {
+          episode.firstAiredAfter = moment.utc(episode.firstAired).add(1, "day").toISOString().substr(0,10)
+          episode.firstAiredBefore = moment.utc(episode.firstAired).subtract(1, "day").toISOString().substr(0,10)
+        }
+        return episode
+      })
       
       
       
@@ -39,8 +61,9 @@ exports.show = (req, res) => {
         //To search:
         wikidataSearch.set('search', show.seriesName); //set the search term
         wikidataSearch.search(function(result, error) {
+            console.log("wikidataSearch "+error);
             if (error) {
-              return;
+              return res.render('show', { title: show.seriesName, show:show});;
             }
             var ids = _.pluck(result.results,"id")
             var w2 = new WikidataSearch()
@@ -60,6 +83,8 @@ exports.show = (req, res) => {
                     
                     res.render('show', { title: show.seriesName, show:show, episodes:episodes, wikilink:wikilink });
                   });
+                } else {
+                  res.render('show', { title: show.seriesName, show:show});
                 }
                 
                 
@@ -78,13 +103,20 @@ exports.show = (req, res) => {
 }
 exports.timetravel = (req, res) => {
   var wikilink = req.query.wikilink
-  var date = moment.utc(req.query.date).subtract(1, "day").toISOString();
+  var date = moment.utc(req.query.date).toISOString();
   var enAPI = "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=revisions&titles="+encodeURIComponent(wikilink)+"&rvprop=timestamp|ids&rvstart="+date+"&rvlimit=1"
   got(enAPI, {
     json: true
   }).then(data => {
-    var revid = (_.values(data.body.query.pages)[0]["revisions"][0]["revid"])
+    var vals = _.values(data.body.query.pages)
+    if (vals.length==0) {
+      return res.send("Not found - this probably predates Wikipedia!")
+    }
+    var revid = (vals[0]["revisions"][0]["revid"])
     var url = "https://en.wikipedia.org/w/index.php?title="+encodeURIComponent(wikilink)+"&oldid="+revid
     res.redirect(url)
+  }).catch(error => {
+    console.log(error);
+    return res.send("Not found - this probably predates Wikipedia!")
   });
 }

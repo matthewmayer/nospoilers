@@ -9,3 +9,6 @@ block content
   p Search for a show
   form(method="GET" action="search")
     input(type="text" name="show")
+  p Or pick a popular show
+  each show in shows
+    +show(show)

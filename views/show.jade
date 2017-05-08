@@ -23,6 +23,10 @@ block content
         p Season #{episode.airedSeason} Episode #{episode.airedEpisodeNumber}
         - lastEpisodeSeason = episode.airedSeason
         p First aired 
-          a(target="_blank" href="/timetravel?wikilink=#{wikilink}&date=#{episode.firstAired}") #{episode.firstAired} - show me Wikipedia from the day before!
+          b #{episode.firstAired} 
+          | - show me Wikipedia from the 
+          a(target="_blank" href="/timetravel?wikilink=#{wikilink}&date=#{episode.firstAiredBefore}") day before (no spoilers) 
+          |  or  
+          a(target="_blank" href="/timetravel?wikilink=#{wikilink}&date=#{episode.firstAiredAfter}") the day after
         p #{episode.overview}
     

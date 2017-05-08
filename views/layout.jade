@@ -4,4 +4,11 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    mixin show(show)
+      p 
+        a(href="/show/#{show.id}")
+          h2 #{show.seriesName} - #{show.network}
+          if show.banner
+            img(src="https://thetvdb.com/banners/#{show.banner}" style="max-width:400px")
+      hr
     block content
