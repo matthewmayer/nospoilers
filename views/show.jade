@@ -9,24 +9,25 @@ block content
     img(src="https://thetvdb.com/banners/#{show.banner}" style="max-width:400px")
   
   p First aired: #{show.firstAired}
-  p #{show.overview}
+  //- p #{show.overview}
   //- p Wikipedia: 
   //-   a(href="https://en.wikipedia.org/wiki/#{wikilink}") https://en.wikipedia.org/wiki/#{wikilink}
   - var lastEpisodeSeason = -1
   each episode in episodes
     if episode.absoluteNumber>0
-      div
-        if lastEpisodeSeason!=episode.airedSeason
-          h2 Season #{episode.airedSeason}
-          hr
-        h4 #{episode.episodeName}
-        p Season #{episode.airedSeason} Episode #{episode.airedEpisodeNumber}
+      if lastEpisodeSeason!=episode.airedSeason
+        h2 Season #{episode.airedSeason}
+        hr
+      .episode
+        h3 #{episode.episodeName}
+        p
+          em Season #{episode.airedSeason}, Episode #{episode.airedEpisodeNumber}
         - lastEpisodeSeason = episode.airedSeason
         p First aired 
           b #{episode.firstAired} 
           | - show me Wikipedia from the 
-          a(target="_blank" href="/timetravel?wikilink=#{wikilink}&date=#{episode.firstAiredBefore}") day before (no spoilers) 
+          a(target="_blank" href="/timetravel?wikilink=#{wikilink}&date=#{episode.firstAiredBefore}") day before (no spoilers)
           |  or  
           a(target="_blank" href="/timetravel?wikilink=#{wikilink}&date=#{episode.firstAiredAfter}") the day after
-        p #{episode.overview}
+        //- p #{episode.overview}
     

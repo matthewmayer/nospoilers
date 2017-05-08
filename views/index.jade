@@ -3,12 +3,16 @@ extends layout
 block content
   h1 No Spoilers
   p This site will let you view the Wikipedia page for a TV show, as of the day before a particular episode originally aired.
-  p So for example if you'd like to read more about a show, but not see spoilers from an episode or season you haven't watched yet, now you can!
-  p This uses the TheTVDB API for TV shows, and the Wikidata and Wikipedia APIs.
-  p I didn't write proper error handling code yet...
-  p Search for a show
+  p So for example if you'd like to read more about a show, but not see Wikipedia spoilers from an episode or season you haven't watched yet, now you can!
+  p This uses the TheTVDB API for TV shows, and the Wikidata and Wikipedia APIs. If you find this useful please 
+    a(href="http://thetvdb.com/donate/" target="_blank") donate to TheTVDB
+    | or 
+    a(href="https://wikimediafoundation.org/wiki/Ways_to_Give" target="_blank")  donate to Wikimedia
+  p A fun side project by Matt Mayer of 
+    a(href="https://www.reigndesign.com/") ReignDesign - mobile app development
+  h3 Search for a show
   form(method="GET" action="search")
-    input(type="text" name="show")
-  p Or pick a popular show
+    input(type="text" name="show" style="font-size:18px; width:400px; padding:8px;" placeholder="Name of show")
+  h3 Or pick a popular show
   each show in shows
     +show(show)

@@ -2,7 +2,11 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
+.episode {
+  background-color:#eee;
+  margin-bottom:24px;
+  padding:8px;
+}
 a {
   color: #00B7FF;
 }
